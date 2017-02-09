@@ -20,8 +20,8 @@ object FirstnameCountbyYearSQL {
 
     // Conversion fichier au format TSV en fichier au format CSV
     /*
-    val csv = logData.map(_.split("\t")).map(c => c(1)+ "," + c(2)+ "," + c(3) +","+ c(4).replace(".0000", "").toInt)
-    csv.saveAsTextFile("/home/guillaume/TP/Spark/dpt2015.txt.csv")
+        val csv = logData.map(_.split("\t")).map(c => c(1)+ "," + c(2).replace("XXXX","0") +"," + c(3).replace("XX","0") +","+ c(4).replace(".0000", "").toInt)
+        csv.saveAsTextFile("/home/guillaume/TP/Spark/dpt2015.txt.csv")
     */
 
 
@@ -36,7 +36,7 @@ object FirstnameCountbyYearSQL {
     val prenom = StructField("prenom", DataTypes.StringType)
     val annee = StructField("annee", DataTypes.IntegerType)
     val departement = StructField("departement", DataTypes.IntegerType)
-    val nombre = StructField("depth", DataTypes.IntegerType)
+    val nombre = StructField("nombre", DataTypes.IntegerType)
 
     val fields = Array(prenom, annee, departement, nombre)
     val schema = StructType(fields)
@@ -47,9 +47,9 @@ object FirstnameCountbyYearSQL {
     df.printSchema()
     df.createOrReplaceTempView("people")
 
-//df.filter(df("annee").equalTo(1978)).show()
+    //df.filter(df("annee").equalTo(1978)).show()
 
-   val toto = spark.sql("SELECT prenom,annee,departement FROM people WHERE annee = 1978")
+    val toto = spark.sql("SELECT * FROM people WHERE prenom = 'GUILLAUME' AND departement = 44")
 
     toto.show()
 
