@@ -6,6 +6,7 @@
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types.{DataTypes, StructField, StructType}
+import org.apache.spark.sql.functions._
 
 object FirstnameCountbyYearSQL {
 
@@ -43,18 +44,15 @@ object FirstnameCountbyYearSQL {
 
     val df = spark.read.schema(schema).csv("/home/guillaume/TP/Spark/dpt2015.txt.csv")
 
-    df.show()
     df.printSchema()
     df.createOrReplaceTempView("people")
 
-    //df.filter(df("annee").equalTo(1978)).show()
+    val toto = spark.sql("SELECT * FROM people WHERE departement = 44")
+    toto.show(100)
 
-    val toto = spark.sql("SELECT * FROM people WHERE prenom = 'GUILLAUME' AND departement = 44")
 
-    toto.show()
-
-    //df.select("prenom","departement")
-    //df.select("preusuel").show()
+   val sums = toto.agg(sum("nombre")).first.get(0)
+    println("TOTAL : il y a " + sums + " occurences")
 
   }
 }
